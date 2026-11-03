@@ -1,0 +1,600 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Enrollment | Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        nav {
+            background-color: #0887ad;
+            padding: 15px 20px;
+            margin: 0 0 25px 0;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: #0f0f0f;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+
+            color: #172554;
+
+            background:
+                radial-gradient(circle at 10% 15%, #93c5fd 0, transparent 32%),
+                radial-gradient(circle at 90% 20%, #99f6e4 0, transparent 30%),
+                radial-gradient(circle at 70% 90%, #c4b5fd 0, transparent 35%),
+                linear-gradient(135deg, #e0e7ff, #dbeafe 50%, #ecfeff);
+
+            background-attachment: fixed;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            border-radius: 26px;
+            background: rgba(255, 255, 255, 0.43);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            box-shadow: 0 25px 70px rgba(59, 80, 150, 0.16);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 66px;
+            height: 66px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            color: white;
+            font-size: 30px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #3b82f6, #7c3aed);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.25);
+        }
+
+        h1 {
+            font-size: clamp(25px, 4vw, 34px);
+            letter-spacing: -1px;
+            color: #172554;
+        }
+
+        .subtitle {
+            margin-top: 8px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .panel {
+            padding: 27px;
+            margin-top: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.48);
+            box-shadow: 0 8px 25px rgba(51, 65, 130, 0.05);
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 23px;
+        }
+
+        h2 {
+            font-size: 21px;
+            color: #1e293b;
+        }
+
+        .count {
+            padding: 8px 13px;
+            border-radius: 30px;
+            background: rgba(59, 130, 246, 0.12);
+            color: #2563eb;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        label {
+            display: block;
+            margin: 19px 0 9px;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        input, select {
+            width: 100%;
+            min-height: 51px;
+            padding: 13px 15px;
+            border: 1px solid rgba(148, 163, 184, 0.42);
+            border-radius: 11px;
+            background: rgba(255, 255, 255, 0.76);
+            color: #1e293b;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+        }
+
+        input:focus, select:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+        }
+
+        button {
+            width: 100%;
+            min-height: 52px;
+            margin-top: 24px;
+            padding: 14px;
+            border: none;
+            border-radius: 11px;
+            color: white;
+            background: linear-gradient(110deg, #3b82f6, #6366f1, #7c3aed);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 9px 20px rgba(99, 102, 241, 0.23);
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 13px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.65;
+            transform: none;
+        }
+
+        #message {
+            display: none;
+            margin-top: 18px;
+            padding: 13px 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        #message.success {
+            display: block;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+            background: rgba(209, 250, 229, 0.75);
+        }
+
+        #message.error {
+            display: block;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+            background: rgba(254, 226, 226, 0.8);
+        }
+
+        .student-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .student {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.62);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .student:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.88);
+        }
+
+        .avatar {
+            width: 46px;
+            height: 46px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 15px;
+            color: white;
+            background: linear-gradient(135deg, #60a5fa, #4f46e5);
+            font-size: 19px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .student:nth-child(even) .avatar {
+            background: linear-gradient(135deg, #a78bfa, #7c3aed);
+        }
+
+        .student-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .student-name {
+            color: #1e293b;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .student-details {
+            margin-top: 6px;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .course-badge {
+            max-width: 145px;
+            padding: 8px 11px;
+            border-radius: 9px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            overflow-wrap: anywhere;
+        }
+
+        .student:nth-child(even) .course-badge {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .empty-state {
+            padding: 26px 14px;
+            color: #64748b;
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .footer {
+            padding-top: 25px;
+            color: #64748b;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 0;
+            }
+
+            .container {
+                margin: 22px 12px 0;
+                width: auto;
+                padding: 19px;
+                border-radius: 20px;
+            }
+
+            .header {
+                align-items: flex-start;
+                gap: 13px;
+            }
+
+            .logo {
+                width: 52px;
+                height: 52px;
+                border-radius: 15px;
+                font-size: 24px;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            .student {
+                flex-wrap: wrap;
+                gap: 11px;
+            }
+
+            .student-info {
+                flex-basis: calc(100% - 65px);
+            }
+
+            .course-badge {
+                margin-left: 57px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="/home">Home</a>
+            <a href="/enrollment">Enrollments</a>
+        </nav>
+    </header>
+    <main class="container">
+
+        <header class="header">
+            <div class="logo" aria-hidden="true">🎓</div>
+            <div>
+                <h1>Student Enrollment</h1>
+                <p class="subtitle">
+                    Enter the student's details and select a course.
+                </p>
+            </div>
+        </header>
+
+        <section class="panel">
+            <div class="section-title">
+                <h2>📝 Enrollment Form</h2>
+            </div>
+
+            <form id="enrollmentForm">
+                <label for="student_name">Student Name</label>
+                <input
+                    id="student_name"
+                    name="student_name"
+                    type="text"
+                    placeholder="Enter student name"
+                    maxlength="100"
+                    autocomplete="name"
+                    required
+                >
+
+                <label for="course_id">Select Course</label>
+                <select id="course_id" name="course_id" required>
+                    <option value="">Choose a course</option>
+                    <option value="103">Python Course</option>
+                    <option value="104">Java Course</option>
+                </select>
+
+                <button id="submitButton" type="submit">
+                    ✨ Enroll Student
+                </button>
+            </form>
+
+            <p id="message" role="status" aria-live="polite"></p>
+        </section>
+
+        <!-- <section class="panel">
+            <div class="section-title">
+                <h2>👥 Enrolled Students</h2>
+                <span class="count" id="studentCount">Loading...</span>
+            </div>
+
+            <div id="enrollmentList" class="student-list" aria-live="polite">
+                <div class="empty-state">Loading enrollments...</div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            Student Enrollment System · Powered by FastAPI
+        </footer> -->
+
+    </main>
+
+    <script>
+        const form = document.getElementById("enrollmentForm");
+        const message = document.getElementById("message");
+        // const enrollmentList = document.getElementById("enrollmentList");
+        // const studentCount = document.getElementById("studentCount");
+        const submitButton = document.getElementById("submitButton");
+
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = type;
+        }
+
+        // async function loadEnrollments() {
+        //     try {
+        //         const response = await fetch("/enrollments");
+
+        //         if (!response.ok) {
+        //             throw new Error("Could not load enrollments.");
+        //         }
+
+        //         const enrollments = await response.json();
+
+        //         if (!Array.isArray(enrollments)) {
+        //             throw new Error("Unexpected enrollment data received.");
+        //         }
+
+        //         studentCount.textContent =
+        //             enrollments.length +
+        //             (enrollments.length === 1 ? " Student" : " Students");
+
+        //         enrollmentList.replaceChildren();
+
+        //         if (enrollments.length === 0) {
+        //             const empty = document.createElement("div");
+        //             empty.className = "empty-state";
+        //             empty.textContent =
+        //                 "🎓 No students enrolled yet. Add your first student using the form above.";
+        //             enrollmentList.appendChild(empty);
+        //             return;
+        //         }
+
+        //         enrollments.forEach(item => {
+        //             const card = document.createElement("article");
+        //             card.className = "student";
+
+        //             const avatar = document.createElement("div");
+        //             avatar.className = "avatar";
+        //             avatar.setAttribute("aria-hidden", "true");
+        //             avatar.textContent =
+        //                 (item.student_name || "?").trim().charAt(0) || "?";
+
+        //             const info = document.createElement("div");
+        //             info.className = "student-info";
+
+        //             const name = document.createElement("div");
+        //             name.className = "student-name";
+        //             name.textContent = item.student_name || "Unknown student";
+
+        //             const details = document.createElement("div");
+        //             details.className = "student-details";
+        //             details.textContent =
+        //                 "Enrollment ID: " +
+        //                 (item.id ?? item.enrollment_id ?? "N/A") +
+        //                 " | Course ID: " + (item.course_id ?? "N/A");
+
+        //             const badge = document.createElement("span");
+        //             badge.className = "course-badge";
+
+        //             const courseNames = {
+        //                 103: "Python Course",
+        //                 104: "Java Course"
+        //             };
+
+        //             badge.textContent =
+        //                 item.course_name ||
+        //                 courseNames[item.course_id] ||
+        //                 ("Course " + (item.course_id ?? "Unknown"));
+
+        //             info.append(name, details);
+        //             card.append(avatar, info, badge);
+        //             enrollmentList.appendChild(card);
+        //         });
+
+        //     } catch (error) {
+        //         studentCount.textContent = "Unavailable";
+        //         enrollmentList.replaceChildren();
+
+        //         const errorText = document.createElement("div");
+        //         errorText.className = "empty-state";
+        //         errorText.textContent =
+        //             error.message + " Check your GET /enrollments endpoint.";
+        //         enrollmentList.appendChild(errorText);
+        //     }
+        // }
+
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const studentName = document
+                .getElementById("student_name")
+                .value.trim();
+
+            const courseValue = document.getElementById("course_id").value;
+
+            if (!studentName || !courseValue) {
+                showMessage(
+                    "Please enter a student name and select a course.",
+                    "error"
+                );
+                return;
+            }
+
+            const payload = {
+                student_name: studentName,
+                course_id: Number(courseValue)
+            };
+
+            submitButton.disabled = true;
+            submitButton.textContent = "Please wait...";
+            showMessage("Submitting enrollment...", "success");
+
+            try {
+                const response = await fetch("/enrollments", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    if (
+                        response.status === 409 &&
+                        result.detail === "Already enrolled in this course."
+                    ) {
+                        throw new Error(
+                            "Already enrolled in this course."
+                        );
+                    }
+
+                    throw new Error(
+                        typeof result.detail === "string"
+                            ? result.detail
+                            : "Enrollment failed. Please try again."
+                    );
+                }
+
+                showMessage(
+                    (result.message || "Enrollment Successful") +
+                    "! " +
+                    (result.student_name || studentName) +
+                    " enrolled in " +
+                    (result.course_name || "the selected course") +
+                    ".",
+                    "success"
+                );
+
+                form.reset();
+                // await loadEnrollments();
+
+            } catch (error) {
+                showMessage(
+                    error.message || "Something went wrong.",
+                    "error"
+                );
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = "✨ Enroll Student";
+            }
+        });
+
+        // loadEnrollments();
+    </script>
+</body>
+</html>
